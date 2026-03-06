@@ -535,7 +535,18 @@ nav {
       
       <div id="phoneInputWrapper">
         <label for="whatsappNumber" style="display: block; font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">Add your WhatsApp number to unlock your report:</label>
-        <input type="tel" id="whatsappNumber" placeholder="+1 (555) 000-0000" style="padding: 12px 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; font-family: var(--font-body); font-size: 14px; width: 100%; outline: none; margin-bottom: 12px; transition: border-color 0.2s;">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <select id="whatsappCode" style="padding: 12px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; font-family: var(--font-body); font-size: 14px; outline: none; transition: border-color 0.2s;">
+            <option value="+52" style="background: var(--ink)">+52</option>
+            <option value="+1" style="background: var(--ink)">+1</option>
+            <option value="+34" style="background: var(--ink)">+34</option>
+            <option value="+54" style="background: var(--ink)">+54</option>
+            <option value="+57" style="background: var(--ink)">+57</option>
+            <option value="+56" style="background: var(--ink)">+56</option>
+            <option value="+51" style="background: var(--ink)">+51</option>
+          </select>
+          <input type="tel" id="whatsappNumber" placeholder="555 000 0000" style="padding: 12px 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; font-family: var(--font-body); font-size: 14px; width: 100%; outline: none; transition: border-color 0.2s;">
+        </div>
       </div>
 
       <a href="https://calendly.com/erfonseca/live-1on1-results-demo" target="_blank" class="btn btn-gold" id="bookBtn" style="display: none;">
@@ -611,12 +622,14 @@ const bookBtn = document.getElementById('bookBtn');
 const baseCalendlyUrl = 'https://calendly.com/erfonseca/live-1on1-results-demo';
 
 phoneInput.addEventListener('input', (e) => {
+  const code = document.getElementById('whatsappCode').value;
   const val = e.target.value.trim();
   // Basic validation length check (e.g. 7+ digits for international numbers)
   if (val.replace(/\D/g, '').length >= 7) { 
     bookBtn.style.display = 'inline-flex';
     // Append the phone number to the Calendly URL as a1
-    bookBtn.href = `${baseCalendlyUrl}?a1=${encodeURIComponent(val)}`;
+    const fullNumber = code + ' ' + val;
+    bookBtn.href = `${baseCalendlyUrl}?a1=${encodeURIComponent(fullNumber)}`;
     phoneInput.style.borderColor = 'rgba(255,255,255,0.3)';
   } else {
     bookBtn.style.display = 'none';
