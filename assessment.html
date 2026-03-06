@@ -1058,9 +1058,8 @@ nav {
 <!-- Nav -->
 <nav>
   <a href="#" class="nav-logo">A<span>C</span>LC <span style="color:rgba(255,255,255,0.2);font-size:14px;margin:0 6px;">·</span> <span style="font-size:16px;color:rgba(255,255,255,0.4);font-weight:300;">Zones of Life</span></a>
-  <div class="nav-right">
-    <span class="nav-label" id="navLabel">Free Assessment</span>
-    <button class="nav-save" id="navSave" style="display:none;">Save & Continue Later</button>
+  <div class="nav-right" id="userAuthMenu">
+    <!-- Rendered by JS -->
   </div>
 </nav>
 
@@ -1555,8 +1554,8 @@ function showScreen(id) {
 function startAssessment() {
   document.getElementById('zoneTabs').style.display = 'flex';
   document.getElementById('floatingProgress').style.display = 'flex';
-  document.getElementById('navSave').style.display = 'block';
-  document.getElementById('navLabel').textContent = 'Zone 1 of 4';
+  // document.getElementById('navSave').style.display = 'block'; // Removed, handled by userAuthMenu
+  document.getElementById('navLabel').textContent = 'Free Assessment'; // Reset to default
   loadQuestion(0, 0);
   showScreen('question');
 }
@@ -1594,7 +1593,7 @@ function loadQuestion(zoneIdx, qIdx) {
   updateGlow(zoneIdx);
 
   // Nav label
-  document.getElementById('navLabel').textContent = `Zone ${zoneIdx + 1} of 4 — ${zone.name}`;
+  // document.getElementById('navLabel').textContent = `Zone ${zoneIdx + 1} of 4 — ${zone.name}`; // Removed, handled by userAuthMenu
 
   // Back button
   const btnBack = document.getElementById('btnBack');
@@ -1790,7 +1789,7 @@ function showGate() {
   document.getElementById('floatingProgress').style.display = 'none';
   document.getElementById('zoneTabs').style.display = 'none';
   document.getElementById('progressFill').style.width = '100%';
-  document.getElementById('navLabel').textContent = 'Almost there';
+  // document.getElementById('navLabel').textContent = 'Almost there'; // Removed, handled by userAuthMenu
 
   showScreen('gate');
 }
@@ -1837,7 +1836,7 @@ function showResults(name) {
     <p class="it-text">${insights[minIdx]}</p>
   `;
 
-  document.getElementById('navLabel').textContent = 'Your Results';
+  // document.getElementById('navLabel').textContent = 'Your Results'; // Removed, handled by userAuthMenu
   showScreen('results');
 
   // Animate score numbers
@@ -1858,6 +1857,29 @@ function animateNumber(elId, from, to, duration) {
   requestAnimationFrame(step);
 }
 
+// User Auth logic
+const userAuthMenu = document.getElementById('userAuthMenu');
+const user = localStorage.getItem('aclc_user');
+
+if (userAuthMenu) {
+  if (user) {
+    userAuthMenu.innerHTML = `
+      <span class="nav-label" style="color: var(--gold);">${user}</span>
+      <button onclick="logout()" class="nav-save" style="cursor: pointer; background:none; border:none; color: rgba(255,255,255,0.4);">Logout</button>
+    `;
+  } else {
+    userAuthMenu.innerHTML = `
+      <a href="login.html" class="nav-save" style="cursor: pointer; background:none; border:none; color: rgba(255,255,255,0.4);">Log in</a>
+    `;
+  }
+}
+
+function logout() {
+  localStorage.removeItem('aclc_user');
+  localStorage.removeItem('aclc_email');
+  window.location.reload();
+}
 </script>
 </body>
 </html>
+```
