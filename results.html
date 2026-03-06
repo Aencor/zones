@@ -6,7 +6,6 @@
 <title>Your Zone Report · ACLC Zones of Life</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 :root {
@@ -445,11 +444,6 @@ nav {
     </p>
   </div>
 
-  <!-- PRINT BAR -->
-  <div class="print-bar" data-html2canvas-ignore="true">
-    <span class="print-label">Your results · Generated today</span>
-    <button class="btn-print" id="pdfBtn" onclick="generatePDF()">⬇ Save as PDF</button>
-  </div>
 
   <!-- ZONE SCORES -->
   <div class="scores-grid" id="scoresGrid">
@@ -635,48 +629,6 @@ phoneInput.addEventListener('input', (e) => {
     bookBtn.style.display = 'none';
   }
 });
-
-// Clean PDF Generation Logic
-function generatePDF() {
-  const element = document.getElementById('reportContent');
-  const pdfBtn = document.getElementById('pdfBtn');
-  const ogText = pdfBtn.innerHTML;
-  
-  pdfBtn.innerHTML = '⏳ Generating PDF...';
-  pdfBtn.style.pointerEvents = 'none';
-  pdfBtn.style.opacity = '0.7';
-
-  // Temporarily adjust some styles for cleaner PDF output
-  const originalPadding = element.style.padding;
-  element.style.padding = '40px';
-  element.style.background = 'var(--warm-white)';
-
-  const opt = {
-    margin:       [0, 0, 0, 0],
-    filename:     storedName ? `${storedName.replace(/[^a-z0-9]/gi, '_')}_Zone_Report.pdf` : 'ACLC_Zone_Report.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false, windowWidth: 820 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save().then(() => {
-    // Revert temporary styles and button state
-    element.style.padding = originalPadding;
-    element.style.background = '';
-    pdfBtn.innerHTML = ogText;
-    pdfBtn.style.pointerEvents = 'auto';
-    pdfBtn.style.opacity = '1';
-  }).catch(err => {
-    console.error('PDF Generation Error:', err);
-    alert('Failed to generate PDF. Falling back to native print.');
-    element.style.padding = originalPadding;
-    element.style.background = '';
-    pdfBtn.innerHTML = ogText;
-    pdfBtn.style.pointerEvents = 'auto';
-    pdfBtn.style.opacity = '1';
-    window.print();
-  });
-}
 
 // User Auth logic
 const userAuthMenu = document.getElementById('userAuthMenu');
