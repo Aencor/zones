@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in · ACLC Zones of Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Google Identity Services Script -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<style>
+:root {
+  --ink:          #0F0E13;
+  --forest:       #2D5A3D;
+  --gold:         #C8A96E;
+  --warm-white:   #F5F2ED;
+  --border:       #DDD9D0;
+  --muted:        #8A8478;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'Outfit', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--warm-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── NAV ── */
+nav {
+  padding: 0 40px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-brand {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+
+/* ── LOGIN CONTAINER ── */
+.login-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 48px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(15,14,19,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--forest);
+}
+
+.login-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.login-headline {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.login-sub {
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  min-height: 40px; /* Give it space to load */
+}
+
+.login-footer {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.login-footer a {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .login-box { padding: 32px 24px; }
+  nav { height: 60px; padding: 0 20px; }
+  .login-wrapper { padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <span class="nav-dot"></span>
+    ACLC · Zones of Life
+  </a>
+</nav>
+
+<div class="login-wrapper">
+  <div class="login-box">
+    <p class="login-eyebrow">Welcome Back</p>
+    <h1 class="login-headline">Access your dashboard.</h1>
+    <p class="login-sub">Log in with your Google account to track your progress and view your past zone reports.</p>
+
+    <!-- Google Login Button Container -->
+    <div class="google-btn-wrapper">
+        <div id="g_id_onload"
+            data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-callback="handleCredentialResponse"
+            data-auto_prompt="false">
+        </div>
+
+        <div class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left">
+        </div>
+    </div>
+
+    <p class="login-footer">Don't have an account? <a href="zones-section-light.html">Start the Free Assessment</a></p>
+  </div>
+</div>
+
+<script>
+// Logic to handle Google JWT decoding
+function parseJwt (token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+}
+
+// Callback invoked by Google Identity Services on successful sign-in
+function handleCredentialResponse(response) {
+    // Decode the credential JWT
+    const responsePayload = parseJwt(response.credential);
+    
+    if (responsePayload) {
+        // Save the user's name to localStorage so other pages can see it
+        localStorage.setItem('aclc_user', responsePayload.given_name || responsePayload.name);
+        localStorage.setItem('aclc_email', responsePayload.email);
+        
+        // Redirect to the assessment page or homepage
+        window.location.href = 'zones-section-light.html';
+    } else {
+        console.error("Failed to parse Google JWT payload.");
+        alert("An error occurred during login. Please try again.");
+    }
+}
+</script>
+
+</body>
+</html>

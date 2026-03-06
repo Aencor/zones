@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zones of Life · The 4 Zones — Light Version</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --ink:           #0F0E13;
+  --forest:        #2D5A3D;
+  --forest-dk:     #234A31;
+  --forest-lt:     rgba(45,90,61,0.07);
+  --gold:          #C8A96E;
+  --gold-dk:       #B8955A;
+  --gold-lt:       rgba(200,169,110,0.10);
+  --warm-white:    #F5F2ED;
+  --warm-light:    #E8E4DC;
+  --border:        #DDD9D0;
+  --muted:         #8A8478;
+  --warm-dark:     #1A1814;
+
+  --zone-finance:  #C8A96E;
+  --zone-soft:     #7EB8A4;
+  --zone-body:     #C47A7A;
+  --zone-hard:     #8A9FD4;
+
+  --font-display:  'Cormorant Garamond', serif;
+  --font-body:     'Outfit', sans-serif;
+  --font-mono:     'DM Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+
+body {
+  background: var(--warm-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border-radius: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: #fff;
+  border: 1px solid var(--forest);
+}
+.btn-primary:hover { background: var(--forest-dk); transform: translateY(-1px); }
+
+.btn-outline-forest {
+  border: 1px solid var(--forest);
+  color: var(--forest);
+  background: transparent;
+}
+.btn-outline-forest:hover { background: var(--forest-lt); }
+
+/* ============================================================
+   THE 4 ZONES — LIGHT VERSION
+   ============================================================ */
+#zones {
+  background: var(--warm-white);
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle warm grid bg */
+#zones::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Gold glow top right */
+#zones::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -80px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ── */
+.zones-header {
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--forest);
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::before,
+.section-label::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--forest);
+  opacity: 0.4;
+}
+
+.section-headline {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.section-headline em {
+  font-style: italic;
+  color: var(--forest);
+}
+
+.section-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ── Zone Cards Grid ── */
+.zones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 48px;
+}
+
+.zone-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border-color 0.3s, transform 0.25s;
+  cursor: default;
+}
+
+/* Top color accent */
+.zone-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  transition: height 0.3s;
+}
+
+.zone-card.finance::before { background: var(--zone-finance); }
+.zone-card.soft::before    { background: var(--zone-soft); }
+.zone-card.body::before    { background: var(--zone-body); }
+.zone-card.hard::before    { background: var(--zone-hard); }
+
+/* Side glow on hover */
+.zone-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.zone-card.finance::after { background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, transparent 60%); }
+.zone-card.soft::after    { background: linear-gradient(135deg, rgba(126,184,164,0.05) 0%, transparent 60%); }
+.zone-card.body::after    { background: linear-gradient(135deg, rgba(196,122,122,0.05) 0%, transparent 60%); }
+.zone-card.hard::after    { background: linear-gradient(135deg, rgba(138,159,212,0.05) 0%, transparent 60%); }
+
+.zone-card:hover {
+  border-color: transparent;
+  box-shadow: 0 12px 40px rgba(15,14,19,0.09);
+  transform: translateY(-5px);
+}
+
+.zone-card:hover::after { opacity: 1; }
+.zone-card:hover::before { height: 4px; }
+
+/* Zone card content */
+.zone-icon-wrap {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.zone-card.finance .zone-icon-wrap { background: rgba(200,169,110,0.10); }
+.zone-card.soft .zone-icon-wrap    { background: rgba(126,184,164,0.10); }
+.zone-card.body .zone-icon-wrap    { background: rgba(196,122,122,0.10); }
+.zone-card.hard .zone-icon-wrap    { background: rgba(138,159,212,0.10); }
+
+.zone-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.zone-card.finance .zone-name { color: var(--zone-finance); }
+.zone-card.soft .zone-name    { color: var(--zone-soft); }
+.zone-card.body .zone-name    { color: var(--zone-body); }
+.zone-card.hard .zone-name    { color: var(--zone-hard); }
+
+.zone-headline {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.zone-copy {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* Score chip at bottom of card */
+.zone-score-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.zone-score-track {
+  flex: 1;
+  height: 3px;
+  background: var(--warm-light);
+  margin-right: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.zone-score-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.zone-card.finance .zone-score-fill { background: var(--zone-finance); }
+.zone-card.soft .zone-score-fill    { background: var(--zone-soft); }
+.zone-card.body .zone-score-fill    { background: var(--zone-body); }
+.zone-card.hard .zone-score-fill    { background: var(--zone-hard); }
+
+.zone-score-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Interplay / CTA strip ── */
+.zones-bottom {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--forest);
+}
+
+.zones-interplay-text {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--warm-dark);
+  line-height: 1.4;
+  max-width: 560px;
+}
+
+.zones-interplay-text strong {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--forest);
+}
+
+.zones-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.zones-cta-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 960px) {
+  .container { padding: 0 24px; }
+  .zones-grid { grid-template-columns: repeat(2, 1fr); }
+  .zones-bottom {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .zones-cta-group { align-items: flex-start; }
+}
+
+@media (max-width: 520px) {
+  .zones-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav data-html2canvas-ignore="true" style="padding: 0 40px; height: 60px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--warm-white);">
+  <a href="index.html" class="nav-brand" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--forest); display: flex; align-items: center; gap: 10px;">
+    <span class="nav-dot" style="width: 8px; height: 8px; background: var(--gold); border-radius: 50%;"></span>
+    ACLC · Zones of Life
+  </a>
+  <div class="nav-cta" id="userAuthMenu" style="display: flex; align-items: center; gap: 12px;">
+    <!-- Rendered by JS -->
+  </div>
+</nav>
+
+<!-- ============================================================
+     THE 4 ZONES — LIGHT VERSION
+     ============================================================ -->
+<section id="zones">
+  <div class="container">
+
+    <!-- Back Button -->
+    <div class="reveal" style="margin-bottom: 40px;">
+      <a href="index.html" class="btn btn-outline-forest" style="padding: 10px 20px; font-size: 13px;">
+        ← Back to Home
+      </a>
+    </div>
+
+    <!-- Header -->
+    <div class="zones-header reveal">
+      <p class="section-label">The Framework</p>
+      <h2 class="section-headline">
+        Your life runs on four zones.<br>
+        <em>Weak in one? It slows down all the others.</em>
+      </h2>
+      <p class="section-sub">
+        Most people work hard on one area and ignore the rest.
+        Zones of Life shows you the full picture — so nothing falls through the cracks.
+      </p>
+    </div>
+
+    <!-- 4 Zone Cards -->
+    <div class="zones-grid">
+
+      <!-- Finance -->
+      <div class="zone-card finance reveal">
+        <div class="zone-icon-wrap">💰</div>
+        <p class="zone-name">Finance</p>
+        <h3 class="zone-headline">Know your numbers. Build lasting wealth.</h3>
+        <p class="zone-copy">Stop guessing with money. Track what matters, fix the gaps, and build a financial life that works for you — not against you.</p>
+        <div class="zone-score-chip">
+          <div class="zone-score-track">
+            <div class="zone-score-fill" data-width="68%"></div>
+          </div>
+          <span class="zone-score-label">Avg 68 / 100</span>
+        </div>
+      </div>
+
+      <!-- Soft Skills -->
+      <div class="zone-card soft reveal reveal-delay-1">
+        <div class="zone-icon-wrap">🧠</div>
+        <p class="zone-name">Life & Soft Skills</p>
+        <h3 class="zone-headline">Think clearer. Lead better.</h3>
+        <p class="zone-copy">Handle what life throws at you. Build the emotional and relational skills that separate high performers from everyone else.</p>
+        <div class="zone-score-chip">
+          <div class="zone-score-track">
+            <div class="zone-score-fill" data-width="81%"></div>
+          </div>
+          <span class="zone-score-label">Avg 81 / 100</span>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="zone-card body reveal reveal-delay-2">
+        <div class="zone-icon-wrap">⚙️</div>
+        <p class="zone-name">Body</p>
+        <h3 class="zone-headline">Sleep better. Move more.</h3>
+        <p class="zone-copy">Run your body like the asset it is. Your energy, focus, and resilience start here — and they affect everything else on this list.</p>
+        <div class="zone-score-chip">
+          <div class="zone-score-track">
+            <div class="zone-score-fill" data-width="44%"></div>
+          </div>
+          <span class="zone-score-label">Avg 44 / 100</span>
+        </div>
+      </div>
+
+      <!-- Hard Skills -->
+      <div class="zone-card hard reveal reveal-delay-3">
+        <div class="zone-icon-wrap">🛠</div>
+        <p class="zone-name">Life & Hard Skills</p>
+        <h3 class="zone-headline">Learn faster. Build systems.</h3>
+        <p class="zone-copy">Grow your career and your leverage. The right skills, built in the right order, compound over time. Know which ones to build next.</p>
+        <div class="zone-score-chip">
+          <div class="zone-score-track">
+            <div class="zone-score-fill" data-width="77%"></div>
+          </div>
+          <span class="zone-score-label">Avg 77 / 100</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Interplay + CTA bar -->
+    <div class="zones-bottom reveal">
+      <p class="zones-interplay-text">
+        Your energy affects your thinking. Your thinking drives your finances.
+        <strong>That's why we look at all four.</strong>
+      </p>
+      <div class="zones-cta-group">
+        <a href="assessment.html" class="btn btn-primary">
+          Map My Zones →
+        </a>
+        <a href="#" class="btn btn-outline-forest">
+          Explore the Zones
+        </a>
+        <span class="zones-cta-note">Free · 12 minutes</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+
+      // Animate score bars inside revealed zone cards
+      const fill = entry.target.querySelector('.zone-score-fill');
+      if (fill) {
+        setTimeout(() => {
+          fill.style.width = fill.dataset.width;
+        }, 200);
+      }
+
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// User Auth logic
+const userAuthMenu = document.getElementById('userAuthMenu');
+const user = localStorage.getItem('aclc_user');
+
+if (userAuthMenu) {
+  if (user) {
+    userAuthMenu.innerHTML = `
+      <span class="nav-user" style="font-size: 13px; color: var(--forest); font-weight: 500;">Welcome, ${user}</span>
+      <button onclick="logout()" class="nav-login" style="font-size: 13px; color: var(--muted); cursor: pointer; margin-left:8px; background:none; border:none;">Logout</button>
+    `;
+  } else {
+    userAuthMenu.innerHTML = `
+      <a href="login.html" class="nav-login" style="font-size: 13px; color: var(--muted); transition: color 0.2s;">Log in</a>
+    `;
+  }
+}
+
+function logout() {
+  localStorage.removeItem('aclc_user');
+  localStorage.removeItem('aclc_email');
+  window.location.reload();
+}
+</script>
+
+</body>
+</html>

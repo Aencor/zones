@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zones of Life · Know Where You Stand. Change What Matters.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS — ACLC · ZONES OF LIFE
+   ============================================================ */
+:root {
+  /* Core palette */
+  --ink:        #0F0E13;
+  --forest:     #2D5A3D;
+  --forest-dk:  #234A31;
+  --forest-lt:  rgba(45,90,61,0.08);
+  --gold:       #C8A96E;
+  --gold-dk:    #B8955A;
+  --gold-lt:    rgba(200,169,110,0.12);
+
+  /* Neutrals */
+  --warm-white: #F5F2ED;
+  --warm-light: #E8E4DC;
+  --border:     #DDD9D0;
+  --muted:      #8A8478;
+  --warm-dark:  #1A1814;
+
+  /* Zone colours */
+  --zone-finance: #C8A96E;
+  --zone-soft:    #7EB8A4;
+  --zone-body:    #C47A7A;
+  --zone-hard:    #8A9FD4;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'Outfit', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  /* Spacing (base-4) */
+  --sp-2:  2px;   --sp-4:  4px;   --sp-6:  6px;   --sp-8:  8px;
+  --sp-12: 12px;  --sp-16: 16px;  --sp-20: 20px;  --sp-24: 24px;
+  --sp-32: 32px;  --sp-40: 40px;  --sp-48: 48px;  --sp-56: 56px;
+  --sp-64: 64px;  --sp-80: 80px;  --sp-96: 96px;
+
+  /* Radius */
+  --r-none: 0px;
+  --r-sm:   4px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--warm-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ============================================================
+   LAYOUT UTILITY
+   ============================================================ */
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 var(--sp-40);
+}
+
+.section {
+  padding: var(--sp-96) 0;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--forest);
+  margin-bottom: var(--sp-16);
+}
+
+.section-label--gold { color: var(--gold); }
+.section-label--muted { color: var(--muted); }
+
+.section-headline {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.section-headline em {
+  font-style: italic;
+  color: var(--forest);
+}
+
+.section-sub {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+  border-radius: var(--r-none);
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--forest-dk); transform: translateY(-1px); }
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+}
+.btn-gold:hover { background: var(--gold-dk); transform: translateY(-1px); }
+
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--ink);
+  background: transparent;
+}
+.btn-outline:hover { border-color: var(--forest); color: var(--forest); }
+
+.btn-ghost-dark {
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+  background: transparent;
+}
+.btn-ghost-dark:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
+
+.arrow { font-size: 16px; }
+
+/* ============================================================
+   NOISE TEXTURE OVERLAY (for dark sections)
+   ============================================================ */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   1. NAVIGATION
+   ============================================================ */
+#nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,242,237,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 var(--sp-40);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  transition: box-shadow 0.3s;
+}
+
+#nav.scrolled {
+  box-shadow: 0 2px 24px rgba(15,14,19,0.06);
+}
+
+.nav-brand {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.nav-brand-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-32);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--forest); }
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.nav-login {
+  font-size: 13px;
+  color: var(--muted);
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.nav-login:hover { color: var(--ink); }
+
+.nav-user {
+  font-size: 13px;
+  color: var(--forest);
+  font-weight: 500;
+}
+
+/* ============================================================
+   2. HERO
+   ============================================================ */
+#hero {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  padding: var(--sp-80) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid background */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Green glow top left */
+#hero::after {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: -80px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(45,90,61,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-80);
+  align-items: center;
+  width: 100%;
+}
+
+.hero-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--forest);
+  margin-bottom: var(--sp-20);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--forest);
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5.5vw, 72px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: var(--sp-24);
+}
+
+.hero-h1 em {
+  font-style: italic;
+  color: var(--forest);
+}
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: var(--sp-40);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+  margin-bottom: var(--sp-48);
+  flex-wrap: wrap;
+}
+
+.hero-trust {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.hero-trust-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* Hero visual — zone score grid */
+.hero-visual {
+  position: relative;
+}
+
+.zone-score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-12);
+}
+
+.zone-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: var(--sp-24);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.zone-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.zone-card.finance::before  { background: var(--zone-finance); }
+.zone-card.soft::before     { background: var(--zone-soft); }
+.zone-card.body::before     { background: var(--zone-body); }
+.zone-card.hard::before     { background: var(--zone-hard); }
+
+.zone-card:hover {
+  border-color: transparent;
+  box-shadow: 0 8px 32px rgba(15,14,19,0.1);
+}
+
+.zone-card-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-12);
+}
+
+.zone-card.finance .zone-card-label  { color: var(--zone-finance); }
+.zone-card.soft .zone-card-label     { color: var(--zone-soft); }
+.zone-card.body .zone-card-label     { color: var(--zone-body); }
+.zone-card.hard .zone-card-label     { color: var(--zone-hard); }
+
+.zone-score-value {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: var(--sp-8);
+}
+
+.zone-score-bar-track {
+  height: 3px;
+  background: var(--warm-light);
+  width: 100%;
+}
+
+.zone-score-bar-fill {
+  height: 100%;
+  border-radius: 0;
+}
+
+.zone-card.finance .zone-score-bar-fill { background: var(--zone-finance); width: 68%; }
+.zone-card.soft .zone-score-bar-fill    { background: var(--zone-soft);    width: 81%; }
+.zone-card.body .zone-score-bar-fill    { background: var(--zone-body);    width: 44%; }
+.zone-card.hard .zone-score-bar-fill    { background: var(--zone-hard);    width: 77%; }
+
+.zone-card-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: var(--sp-8);
+  font-family: var(--font-mono);
+}
+
+.hero-visual-caption {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: var(--sp-16);
+}
+
+/* ============================================================
+   3. TRUST BAR
+   ============================================================ */
+#trust-bar {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: var(--sp-32) 0;
+  background: #fff;
+}
+
+.trust-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.trust-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: 0 var(--sp-40);
+  position: relative;
+}
+
+.trust-stat + .trust-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 1px;
+  background: var(--border);
+}
+
+.trust-stat-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.trust-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ============================================================
+   4. PROBLEM SECTION
+   ============================================================ */
+#problem {
+  background: var(--warm-white);
+}
+
+.problem-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-80);
+  align-items: center;
+}
+
+.problem-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.problem-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  padding: var(--sp-24) var(--sp-24);
+  display: flex;
+  gap: var(--sp-16);
+  align-items: flex-start;
+  transition: border-left-color 0.3s;
+}
+
+.problem-card:hover { border-left-color: var(--forest); }
+
+.problem-card-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.7;
+}
+
+.problem-card-text {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--warm-dark);
+}
+
+/* ============================================================
+   5. THE 4 ZONES
+   ============================================================ */
+#zones {
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+
+#zones::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.zones-header {
+  text-align: center;
+  margin-bottom: var(--sp-64);
+  position: relative;
+  z-index: 1;
+}
+
+.zones-header .section-headline { color: #fff; }
+.zones-header .section-headline em { color: var(--gold); }
+.zones-header .section-sub { color: rgba(255,255,255,0.55); margin: var(--sp-16) auto 0; }
+
+.zones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-16);
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--sp-48);
+}
+
+.zone-feature-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: var(--sp-32) var(--sp-24);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.zone-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.zone-feature-card.finance::before { background: var(--zone-finance); }
+.zone-feature-card.soft::before    { background: var(--zone-soft); }
+.zone-feature-card.body::before    { background: var(--zone-body); }
+.zone-feature-card.hard::before    { background: var(--zone-hard); }
+
+.zone-feature-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-4px);
+}
+
+.zone-icon {
+  font-size: 28px;
+  margin-bottom: var(--sp-16);
+}
+
+.zone-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-12);
+}
+
+.zone-feature-card.finance .zone-name { color: var(--zone-finance); }
+.zone-feature-card.soft .zone-name    { color: var(--zone-soft); }
+.zone-feature-card.body .zone-name    { color: var(--zone-body); }
+.zone-feature-card.hard .zone-name    { color: var(--zone-hard); }
+
+.zone-headline {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: var(--sp-12);
+  line-height: 1.2;
+}
+
+.zone-copy {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+}
+
+.zones-interplay {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: var(--sp-48);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-24);
+}
+
+.zones-interplay p {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+}
+
+/* ============================================================
+   6. HOW IT WORKS
+   ============================================================ */
+#how-it-works {
+  background: #fff;
+}
+
+.hiw-header {
+  text-align: center;
+  margin-bottom: var(--sp-64);
+}
+
+.hiw-header .section-sub { margin: var(--sp-16) auto 0; }
+
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+}
+
+/* Connecting line */
+.steps-row::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--forest) 0%, var(--gold) 100%);
+  opacity: 0.25;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 var(--sp-16);
+  position: relative;
+}
+
+.step-dot {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--warm-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--sp-20);
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s;
+}
+
+.step:hover .step-dot {
+  background: var(--forest);
+  color: #fff;
+  border-color: var(--forest);
+}
+
+.step-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dk);
+  margin-bottom: var(--sp-8);
+}
+
+.step-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: var(--sp-8);
+}
+
+.step-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   7. MID-PAGE CTA
+   ============================================================ */
+#mid-cta {
+  background: var(--forest);
+  padding: var(--sp-80) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#mid-cta::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(200,169,110,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mid-cta-inner {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-24);
+}
+
+.mid-cta-headline {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.mid-cta-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+}
+
+.mid-cta-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ============================================================
+   8. TESTIMONIALS
+   ============================================================ */
+#proof {
+  background: var(--warm-white);
+}
+
+.proof-header {
+  text-align: center;
+  margin-bottom: var(--sp-56);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-20);
+}
+
+.testimonial-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: var(--sp-32);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  position: relative;
+  transition: box-shadow 0.3s;
+}
+
+.testimonial-card:hover {
+  box-shadow: 0 8px 40px rgba(15,14,19,0.07);
+}
+
+.testimonial-quote-mark {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-style: italic;
+  color: var(--forest);
+  line-height: 1;
+  opacity: 0.3;
+  height: 32px;
+  overflow: visible;
+  margin-top: -8px;
+}
+
+.testimonial-score-row {
+  display: flex;
+  gap: var(--sp-8);
+  align-items: center;
+}
+
+.score-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.score-badge-from {
+  background: rgba(200,169,110,0.12);
+  color: var(--gold-dk);
+  padding: 4px 8px;
+}
+
+.score-arrow {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.score-badge-to {
+  background: rgba(45,90,61,0.1);
+  color: var(--forest);
+  padding: 4px 8px;
+}
+
+.score-zone-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.testimonial-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--warm-dark);
+  flex: 1;
+}
+
+.testimonial-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-top: var(--sp-16);
+  border-top: 1px solid var(--border);
+}
+
+.attribution-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.attribution-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   9. FAQ
+   ============================================================ */
+#faq {
+  background: #fff;
+}
+
+.faq-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-80);
+  align-items: start;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-20) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-16);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ink);
+  cursor: pointer;
+  background: transparent;
+  transition: color 0.2s;
+}
+
+.faq-question:hover { color: var(--forest); }
+
+.faq-question.open { color: var(--forest); }
+
+.faq-icon {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.faq-question.open .faq-icon {
+  transform: rotate(45deg);
+  color: var(--forest);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 0 var(--sp-20);
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.faq-answer.visible { display: block; }
+
+.faq-sticky {
+  position: sticky;
+  top: 80px;
+}
+
+.faq-callout {
+  background: var(--ink);
+  color: #fff;
+  padding: var(--sp-40);
+}
+
+.faq-callout-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--sp-16);
+}
+
+.faq-callout h3 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.25;
+  margin-bottom: var(--sp-16);
+}
+
+.faq-callout p {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: var(--sp-32);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   10. FINAL CTA
+   ============================================================ */
+#final-cta {
+  background: var(--ink);
+  padding: var(--sp-96) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#final-cta::before {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(45,90,61,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.final-cta-inner {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-24);
+}
+
+.final-cta-headline {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 300;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.final-cta-headline strong {
+  font-style: normal;
+  font-weight: 300;
+  color: var(--gold);
+}
+
+.final-cta-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+}
+
+.final-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--sp-8);
+}
+
+.final-cta-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ============================================================
+   11. FOOTER
+   ============================================================ */
+footer {
+  background: var(--warm-dark);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: var(--sp-48) 0 var(--sp-32);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--sp-40);
+  margin-bottom: var(--sp-40);
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+.footer-brand-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.footer-brand-name span {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+.footer-tagline {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
+  max-width: 240px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: var(--sp-16);
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.footer-col ul a {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+}
+
+.footer-col ul a:hover { color: #fff; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: var(--sp-24);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-legal {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+}
+
+.footer-legal a {
+  color: rgba(255,255,255,0.35);
+  transition: color 0.2s;
+}
+
+.footer-legal a:hover { color: rgba(255,255,255,0.6); }
+
+/* ============================================================
+   MOBILE BOTTOM BAR
+   ============================================================ */
+#mobile-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: var(--sp-12) var(--sp-20);
+}
+
+.mobile-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+
+.mobile-bar-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 960px) {
+  .container { padding: 0 var(--sp-24); }
+
+  .hero-inner { grid-template-columns: 1fr; gap: var(--sp-48); }
+  .hero-visual { order: -1; }
+  .zone-score-grid { grid-template-columns: repeat(4, 1fr); gap: var(--sp-8); }
+
+  .zones-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-row { grid-template-columns: 1fr; gap: var(--sp-32); }
+  .steps-row::before { display: none; }
+  .step { flex-direction: row; text-align: left; gap: var(--sp-16); align-items: flex-start; }
+  .step-dot { flex-shrink: 0; }
+
+  .testimonials-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  .faq-inner { grid-template-columns: 1fr; }
+  .faq-sticky { position: static; }
+
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .problem-inner { grid-template-columns: 1fr; }
+
+  .nav-links { display: none; }
+  #mobile-bar { display: block; }
+
+  .trust-bar-inner { flex-direction: column; gap: var(--sp-24); }
+  .trust-stat + .trust-stat::before { display: none; }
+}
+
+@media (max-width: 600px) {
+  .zone-score-grid { grid-template-columns: repeat(2, 1fr); }
+  .zones-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     1. NAVIGATION
+     ============================================================ -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-brand-dot"></span>
+    ACLC · Zones of Life
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#zones">The 4 Zones</a></li>
+    <li><a href="#">Coaching</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+
+  <div class="nav-cta" id="userAuthMenu">
+    <!-- Rendered by JS -->
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     2. HERO
+     ============================================================ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- Left: Copy -->
+      <div class="hero-copy">
+        <p class="hero-label">Life Performance Platform</p>
+
+        <h1 class="hero-h1">
+          You're doing a lot.<br>
+          But are you winning<br>
+          <em>in all four areas</em><br>
+          of your life?
+        </h1>
+
+        <p class="hero-sub">
+          Zones of Life scores your Finance, Mindset, Body, and Skills —
+          so you know exactly where to focus next.
+        </p>
+
+        <div class="hero-actions">
+          <a href="zones-section-light.html" class="btn btn-primary">
+            Map My Zones →
+          </a>
+          <a href="#how-it-works" class="btn btn-outline">
+            See How It Works ↓
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <span class="hero-trust-dot"></span>
+          Join 1,200+ people who've already mapped their zones.
+        </div>
+      </div>
+
+      <!-- Right: Zone Score Visual -->
+      <div class="hero-visual reveal">
+        <div class="zone-score-grid">
+
+          <div class="zone-card finance">
+            <p class="zone-card-label">Finance</p>
+            <p class="zone-score-value">68</p>
+            <div class="zone-score-bar-track">
+              <div class="zone-score-bar-fill"></div>
+            </div>
+            <p class="zone-card-sub">Room to grow</p>
+          </div>
+
+          <div class="zone-card soft">
+            <p class="zone-card-label">Soft Skills</p>
+            <p class="zone-score-value">81</p>
+            <div class="zone-score-bar-track">
+              <div class="zone-score-bar-fill"></div>
+            </div>
+            <p class="zone-card-sub">Strong zone</p>
+          </div>
+
+          <div class="zone-card body">
+            <p class="zone-card-label">Body</p>
+            <p class="zone-score-value">44</p>
+            <div class="zone-score-bar-track">
+              <div class="zone-score-bar-fill"></div>
+            </div>
+            <p class="zone-card-sub">Focus here first</p>
+          </div>
+
+          <div class="zone-card hard">
+            <p class="zone-card-label">Hard Skills</p>
+            <p class="zone-score-value">77</p>
+            <div class="zone-score-bar-track">
+              <div class="zone-score-bar-fill"></div>
+            </div>
+            <p class="zone-card-sub">On track</p>
+          </div>
+
+        </div>
+        <p class="hero-visual-caption">Sample zone score report</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     3. TRUST BAR
+     ============================================================ -->
+<div id="trust-bar">
+  <div class="container">
+    <div class="trust-bar-inner">
+
+      <div class="trust-stat reveal">
+        <span class="trust-stat-value">4</span>
+        <span class="trust-stat-label">Life Zones Assessed</span>
+      </div>
+
+      <div class="trust-stat reveal reveal-delay-1">
+        <span class="trust-stat-value">5</span>
+        <span class="trust-stat-label">Step Expert Journey</span>
+      </div>
+
+      <div class="trust-stat reveal reveal-delay-2">
+        <span class="trust-stat-value">12</span>
+        <span class="trust-stat-label">Minutes to Your Score</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     4. PROBLEM
+     ============================================================ -->
+<section id="problem" class="section">
+  <div class="container">
+    <div class="problem-inner">
+
+      <div>
+        <p class="section-label">Sound Familiar?</p>
+        <h2 class="section-headline">
+          Most people are busy.<br>
+          Few are <em>clear.</em>
+        </h2>
+        <p class="section-sub" style="margin-top: 20px;">
+          You're putting in the work. But something still feels off.
+          The problem isn't effort — it's not knowing which area to fix first.
+        </p>
+      </div>
+
+      <div class="problem-cards">
+
+        <div class="problem-card reveal">
+          <span class="problem-card-icon">⚡</span>
+          <p class="problem-card-text">
+            You're busy — but you're not sure it's actually moving the needle.
+          </p>
+        </div>
+
+        <div class="problem-card reveal reveal-delay-1">
+          <span class="problem-card-icon">🔍</span>
+          <p class="problem-card-text">
+            You know something is off. You just don't know which area to fix first.
+          </p>
+        </div>
+
+        <div class="problem-card reveal reveal-delay-2">
+          <span class="problem-card-icon">📚</span>
+          <p class="problem-card-text">
+            You've tried tools, books, and coaches. Nothing gave you the full picture.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     5. THE 4 ZONES
+     ============================================================ -->
+<section id="zones" class="section">
+  <div class="container">
+
+    <div class="zones-header reveal">
+      <p class="section-label section-label--gold">The Framework</p>
+      <h2 class="section-headline">
+        Your life runs on four zones.<br>
+        <em>Weak in one? It slows down all the others.</em>
+      </h2>
+      <p class="section-sub">
+        Most people work hard on one area and ignore the rest.
+        Zones of Life shows you the full picture — so nothing falls through the cracks.
+      </p>
+    </div>
+
+    <div class="zones-grid">
+
+      <div class="zone-feature-card finance reveal">
+        <div class="zone-icon">💰</div>
+        <p class="zone-name">Finance</p>
+        <h3 class="zone-headline">Know your numbers. Build lasting wealth.</h3>
+        <p class="zone-copy">Stop guessing with money. Track what matters, fix the gaps, and build a financial life that works for you — not against you.</p>
+      </div>
+
+      <div class="zone-feature-card soft reveal reveal-delay-1">
+        <div class="zone-icon">🧠</div>
+        <p class="zone-name">Life & Soft Skills</p>
+        <h3 class="zone-headline">Think clearer. Lead better.</h3>
+        <p class="zone-copy">Handle what life throws at you. Build the emotional and relational skills that separate high performers from everyone else.</p>
+      </div>
+
+      <div class="zone-feature-card body reveal reveal-delay-2">
+        <div class="zone-icon">⚙️</div>
+        <p class="zone-name">Body</p>
+        <h3 class="zone-headline">Sleep better. Move more.</h3>
+        <p class="zone-copy">Run your body like the asset it is. Your energy, focus, and resilience start here — and they affect everything else on this list.</p>
+      </div>
+
+      <div class="zone-feature-card hard reveal reveal-delay-3">
+        <div class="zone-icon">🛠</div>
+        <p class="zone-name">Life & Hard Skills</p>
+        <h3 class="zone-headline">Learn faster. Build systems.</h3>
+        <p class="zone-copy">Grow your career and your leverage. The right skills, built in the right order, compound over time. Know which ones to build next.</p>
+      </div>
+
+    </div>
+
+    <div class="zones-interplay reveal">
+      <p>Your energy affects your thinking. Your thinking drives your finances. That's why we look at all four.</p>
+      <a href="#" class="btn btn-gold">Explore the Zones →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     6. HOW IT WORKS
+     ============================================================ -->
+<section id="how-it-works" class="section">
+  <div class="container">
+
+    <div class="hiw-header reveal">
+      <p class="section-label">The Process</p>
+      <h2 class="section-headline">Five steps. Twelve minutes. <em>A clear path forward.</em></h2>
+      <p class="section-sub">No vague advice. No generic plans. Just a clear diagnosis and an honest next step.</p>
+    </div>
+
+    <div class="steps-row">
+
+      <div class="step reveal">
+        <div class="step-dot">01</div>
+        <div>
+          <p class="step-label">Assess</p>
+          <p class="step-title">Answer Smart Questions</p>
+          <p class="step-desc">Go through targeted questions across all four zones. Takes about 12 minutes.</p>
+        </div>
+      </div>
+
+      <div class="step reveal reveal-delay-1">
+        <div class="step-dot">02</div>
+        <div>
+          <p class="step-label">Diagnose</p>
+          <p class="step-title">Get Your Zone Scores</p>
+          <p class="step-desc">See exactly where you're strong — and where you're stuck. Numbers, not guesses.</p>
+        </div>
+      </div>
+
+      <div class="step reveal reveal-delay-2">
+        <div class="step-dot">03</div>
+        <div>
+          <p class="step-label">Discover</p>
+          <p class="step-title">Find Your Resources</p>
+          <p class="step-desc">Browse tools matched to your exact gaps. Curated for your specific results.</p>
+        </div>
+      </div>
+
+      <div class="step reveal reveal-delay-3">
+        <div class="step-dot">04</div>
+        <div>
+          <p class="step-label">Review</p>
+          <p class="step-title">Talk to a Real Expert</p>
+          <p class="step-desc">Optional coaching session. Walk through your results with someone who's done this before.</p>
+        </div>
+      </div>
+
+      <div class="step reveal reveal-delay-4">
+        <div class="step-dot">05</div>
+        <div>
+          <p class="step-label">Decide</p>
+          <p class="step-title">Leave with a Clear Next Step</p>
+          <p class="step-desc">Not a to-do list. One clear, specific action that moves the right zone forward.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     7. MID-PAGE CTA
+     ============================================================ -->
+<section id="mid-cta">
+  <div class="container">
+    <div class="mid-cta-inner">
+      <p class="mid-cta-time">Free · 12 Minutes · No Credit Card</p>
+      <h2 class="mid-cta-headline">Ready to see where you actually stand?</h2>
+      <p class="mid-cta-sub">Your results are waiting. It takes 12 minutes.</p>
+      <a href="zones-section-light.html" class="btn btn-gold">
+        Map My Zones Now <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     8. TESTIMONIALS / PROOF
+     ============================================================ -->
+<section id="proof" class="section">
+  <div class="container">
+
+    <div class="proof-header reveal">
+      <p class="section-label section-label--muted">Real Results</p>
+      <h2 class="section-headline"><em>Don't take our word for it.</em></h2>
+    </div>
+
+    <div class="testimonials-grid">
+
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card reveal">
+        <div class="testimonial-quote-mark">"</div>
+
+        <div class="testimonial-score-row">
+          <div class="score-badge">
+            <span class="score-badge-from">38</span>
+            <span class="score-arrow">→</span>
+            <span class="score-badge-to">74</span>
+          </div>
+          <span class="score-zone-tag">Finance</span>
+        </div>
+
+        <p class="testimonial-text">
+          I didn't need more information — I needed to know which numbers to fix first.
+          Zones of Life showed me exactly that.
+        </p>
+
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Marcus T., 42</span>
+          <span class="attribution-role">CEO · Executive</span>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-quote-mark">"</div>
+
+        <div class="testimonial-score-row">
+          <div class="score-badge">
+            <span class="score-badge-from">41</span>
+            <span class="score-arrow">→</span>
+            <span class="score-badge-to">79</span>
+          </div>
+          <span class="score-zone-tag">Body</span>
+        </div>
+
+        <p class="testimonial-text">
+          My Body zone was killing my productivity and I didn't even see it.
+          After my coaching session, I had a 3-week plan that actually worked.
+        </p>
+
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Sofia R., 37</span>
+          <span class="attribution-role">SMB Owner · Business</span>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-quote-mark">"</div>
+
+        <div class="testimonial-score-row">
+          <div class="score-badge">
+            <span class="score-badge-from">52</span>
+            <span class="score-arrow">→</span>
+            <span class="score-badge-to">88</span>
+          </div>
+          <span class="score-zone-tag">Soft Skills</span>
+        </div>
+
+        <p class="testimonial-text">
+          I'd read dozens of self-help books. None of them told me my Soft Skills zone
+          was the bottleneck — until this assessment.
+        </p>
+
+        <div class="testimonial-attribution">
+          <span class="attribution-name">Daniel K., 31</span>
+          <span class="attribution-role">Director · Growth Seeker</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     9. FAQ
+     ============================================================ -->
+<section id="faq" class="section">
+  <div class="container">
+    <div class="faq-inner">
+
+      <!-- Left: FAQ List -->
+      <div>
+        <p class="section-label" style="margin-bottom: 8px;">Good Questions</p>
+        <h2 class="section-headline" style="margin-bottom: 40px;"><em>Here are the answers.</em></h2>
+
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              How long does the assessment take?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">About 12 minutes. You can save your progress and come back if you need a break.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Is my data private?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">Yes. Your results are never shared without your permission. We take privacy seriously.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What happens after I finish?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">You get a personalized report with your zone scores, gap analysis, and curated resources — right away.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Do I need to buy anything?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">No. The assessment is completely free. Coaching and programs are optional next steps.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What if my scores are low?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">That's exactly why you're here. Low scores show you where the real opportunity is — not something to feel bad about.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              How is this different from other assessments?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">Most tools look at one area of your life. We look at all four — and show you how they connect.</p>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Can I take it again later?
+              <span class="faq-icon">+</span>
+            </button>
+            <p class="faq-answer">Yes. We recommend reassessing every 60–90 days to track your progress over time.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: Sticky Callout -->
+      <div class="faq-sticky">
+        <div class="faq-callout reveal">
+          <p class="faq-callout-label">Still on the fence?</p>
+          <h3>It's free, it's 12 minutes, and you might learn something about yourself that changes everything.</h3>
+          <p>No credit card. No commitment. Just honest data about where you actually stand — across all four zones.</p>
+          <a href="zones-section-light.html" class="btn btn-gold" style="width: 100%; justify-content: center;">
+            Start Free Assessment →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     10. FINAL CTA
+     ============================================================ -->
+<section id="final-cta">
+  <div class="container">
+    <div class="final-cta-inner">
+
+      <p class="section-label section-label--gold">Your Next Move</p>
+
+      <h2 class="final-cta-headline">
+        You're <strong>12 minutes away</strong> from knowing exactly where to focus.
+      </h2>
+
+      <p class="final-cta-sub">
+        Stop guessing. Get your zone scores, see the gaps, and leave with one clear next step.
+        No fluff. No pressure. Just a clear picture of where you stand.
+      </p>
+
+      <div class="final-cta-actions">
+        <a href="zones-section-light.html" class="btn btn-gold" style="padding: 16px 36px; font-size: 16px;">
+          Start the Free Assessment <span class="arrow">→</span>
+        </a>
+        <a href="#" class="btn btn-ghost-dark">
+          Or talk to a coach first
+        </a>
+      </div>
+
+      <p class="final-cta-time">Free · 12 Minutes · 4 Zones · Instant Results</p>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     11. FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <div class="footer-brand-name">
+          <span></span>
+          ACLC · Zones of Life
+        </div>
+        <p class="footer-tagline">
+          The life performance platform that shows you where to focus — across all four zones.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Assessment</a></li>
+          <li><a href="#">The 4 Zones</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Coaching</a></li>
+          <li><a href="#">Success Stories</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Sign In</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-legal">© 2026 ACLC · Zones of Life. All rights reserved.</p>
+      <div class="footer-legal" style="display:flex; gap: 24px;">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     MOBILE BOTTOM BAR
+     ============================================================ -->
+<div id="mobile-bar">
+  <div class="mobile-bar-inner">
+    <span class="mobile-bar-text">Free · 12 min</span>
+    <a href="assessment.html" class="btn btn-gold" style="padding: 10px 20px; font-size: 13px;">
+      Start Assessment →
+    </a>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ── Nav shadow on scroll ──────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ── Scroll reveal ─────────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── FAQ accordion ─────────────────────────────────────────────
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-question.open').forEach(q => {
+    q.classList.remove('open');
+    q.nextElementSibling.classList.remove('visible');
+  });
+
+  // Open clicked (if it was closed)
+  if (!isOpen) {
+    btn.classList.add('open');
+    answer.classList.add('visible');
+  }
+}
+
+// ── Count-up animation for trust bar ─────────────────────────
+function animateCount(el, target, duration) {
+  const start = performance.now();
+  const from = 0;
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(from + (target - from) * ease);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const trustObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const values = [4, 5, 12];
+      entry.target.querySelectorAll('.trust-stat-value').forEach((el, i) => {
+        animateCount(el, values[i], 1000 + i * 200);
+      });
+      trustObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const trustBar = document.getElementById('trust-bar');
+if (trustBar) trustObserver.observe(trustBar);
+
+// User Auth logic
+const userAuthMenu = document.getElementById('userAuthMenu');
+const user = localStorage.getItem('aclc_user');
+
+if (user) {
+  userAuthMenu.innerHTML = `
+    <span class="nav-user">Welcome, ${user}</span>
+    <a href="zones-section-light.html" class="btn btn-primary" style="padding: 10px 20px;">Your Zones</a>
+    <button onclick="logout()" class="nav-login" style="margin-left:8px; background:none; border:none;">Logout</button>
+  `;
+} else {
+  userAuthMenu.innerHTML = `
+    <a href="login.html" class="nav-login">Log in</a>
+    <a href="zones-section-light.html" class="btn btn-primary" style="padding: 10px 20px;">Start Free</a>
+  `;
+}
+
+function logout() {
+  localStorage.removeItem('aclc_user');
+  localStorage.removeItem('aclc_email');
+  window.location.reload();
+}
+</script>
+
+</body>
+</html>
