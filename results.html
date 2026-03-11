@@ -777,10 +777,14 @@
       }
     });
 
+    let capturedEventDate = null;
+
     function openCalendly() {
       const code = document.getElementById('whatsappCode').value;
       const val = phoneInput.value.trim();
       const fullNumber = code + ' ' + val;
+      
+      const cachedName = localStorage.getItem('aclc_user') || sessionStorage.getItem('zol_name') || '';
 
       // Show backup button for demo reliability
       document.getElementById('waConfirmBtn').style.display = 'inline-flex';
@@ -788,6 +792,7 @@
       Calendly.initPopupWidget({
         url: 'https://calendly.com/erfonseca/live-1on1-results-demo',
         prefill: {
+          name: cachedName,
           customAnswers: {
             a1: fullNumber
           }
@@ -798,13 +803,18 @@
 
     // 🚀 NEW: Robust WhatsApp Redirect 🚀
     function sendWhatsAppNow(eventData = null) {
-      const userName = sessionStorage.getItem('zol_name') || 'Invitado';
-      let eventDate = 'mi cita';
+      // 1. Get Name (Try payload first, then storage)
+      const inviteeName = eventData && eventData.payload && eventData.payload.invitee && eventData.payload.invitee.name;
+      const cachedName = localStorage.getItem('aclc_user') || sessionStorage.getItem('zol_name');
+      const userName = inviteeName || cachedName || 'Invitado';
       
-      // Try to get date from Calendly event if available
-      if (eventData && eventData.payload && eventData.payload.event) {
-        // Optional: Extract date/time from Calendly payload if needed
-         console.log('Calendly Payload:', eventData.payload);
+      // 2. Format captured date
+      let eventDate = 'mi cita';
+      if (capturedEventDate) {
+          const dateObj = new Date(capturedEventDate);
+          eventDate = dateObj.toLocaleString('es-ES', { 
+              day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' 
+          });
       }
 
       const targetNumber = '5215527551675';
@@ -821,7 +831,10 @@
         bBtn.style.background = '#25D366';
         bBtn.style.borderColor = '#25D366';
       }
-      if (wBtn) wBtn.innerHTML = 'Redirigiendo...';
+      if (wBtn) {
+          wBtn.innerHTML = 'Redirigiendo...';
+          wBtn.style.display = 'inline-flex';
+      }
 
       setTimeout(() => {
         window.location.href = url;
