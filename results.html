@@ -691,6 +691,11 @@
           class="btn btn-gold" id="bookBtn" style="display: none;">
           Book Your Live Review →
         </a>
+        <!-- Demo Manual Backup Button -->
+        <a href="javascript:void(0)" onclick="sendWhatsAppNow()" class="btn" id="waConfirmBtn" 
+           style="display:none; background:#25D366; color:white; margin-top:10px; width:100%;">
+           ✅ Ya agendé, enviar WhatsApp ahora
+        </a>
         <a href="assessment.html" class="btn btn-ghost" id="retakeBtn">
           Retake Assessment
         </a>
@@ -777,6 +782,9 @@
       const val = phoneInput.value.trim();
       const fullNumber = code + ' ' + val;
 
+      // Show backup button for demo reliability
+      document.getElementById('waConfirmBtn').style.display = 'inline-flex';
+
       Calendly.initPopupWidget({
         url: 'https://calendly.com/erfonseca/live-1on1-results-demo',
         prefill: {
@@ -786,6 +794,38 @@
         }
       });
       return false;
+    }
+
+    // 🚀 NEW: Robust WhatsApp Redirect 🚀
+    function sendWhatsAppNow(eventData = null) {
+      const userName = sessionStorage.getItem('zol_name') || 'Invitado';
+      let eventDate = 'mi cita';
+      
+      // Try to get date from Calendly event if available
+      if (eventData && eventData.payload && eventData.payload.event) {
+        // Optional: Extract date/time from Calendly payload if needed
+         console.log('Calendly Payload:', eventData.payload);
+      }
+
+      const targetNumber = '5215527551675';
+      const message = `Hola mi nombre es ${userName} y confirme mi cita para ${eventDate}`;
+      const url = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
+
+      console.log('Redirecting to WhatsApp:', url);
+      
+      const bBtn = document.getElementById('bookBtn');
+      const wBtn = document.getElementById('waConfirmBtn');
+      
+      if (bBtn) {
+        bBtn.innerHTML = '✅ ¡Cita Confirmada!';
+        bBtn.style.background = '#25D366';
+        bBtn.style.borderColor = '#25D366';
+      }
+      if (wBtn) wBtn.innerHTML = 'Redirigiendo...';
+
+      setTimeout(() => {
+        window.location.href = url;
+      }, 1000);
     }
 
     // User Auth logic
@@ -811,44 +851,15 @@
       window.location.reload();
     }
 
-    // 🚀 WHATSAPP DEMO INTEGRATION (v4 - ROBUST) 🚀
-    // Listen for any message from Calendly to debug and redirect
+    // 🚀 WHATSAPP DEMO INTEGRATION (v5 - SIMULATION READY) 🚀
     window.addEventListener('message', function (e) {
-      // Robust origin & event checking
       const isCalendly = e.origin.includes('calendly.com') || 
                          (e.data && e.data.event && e.data.event.includes('calendly'));
       
       if (isCalendly) {
-        console.log('Calendly Event Message:', e.data);
-
-        // Check for the specific schedule event
+        console.log('Calendly Event:', e.data);
         if (e.data.event === 'calendly.event_scheduled') {
-          console.log('Success! Booking confirmed. Preparing WhatsApp redirection...');
-          
-          const bookBtn = document.getElementById('bookBtn');
-          const phoneInput = document.getElementById('whatsappNumber');
-          const code = document.getElementById('whatsappCode').value;
-          const rawNumber = phoneInput.value.trim().replace(/\D/g, '');
-          
-          // 1. Immediate Visual Feedback
-          if (bookBtn) {
-            bookBtn.innerHTML = '¡Cita Confirmada! Redirigiendo...';
-            bookBtn.style.background = '#25D366';
-            bookBtn.style.borderColor = '#25D366';
-            bookBtn.style.color = '#fff';
-            bookBtn.style.pointerEvents = 'none'; // Avoid double clicks
-          }
-
-          // 2. Build URL
-          const whatsappNumber = rawNumber ? (code.replace('+', '') + rawNumber) : '5215555555555'; 
-          const message = '¡Hola! Acabo de confirmar mi cita en Calendly. ¿Podemos coordinar los detalles?';
-          const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-          // 3. Fallback: If for some reason redirection is blocked, show alert
-          // but window.location.href is almost never blocked.
-          setTimeout(() => {
-            window.location.href = url;
-          }, 1200);
+          sendWhatsAppNow(e.data);
         }
       }
     });
