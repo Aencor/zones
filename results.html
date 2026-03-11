@@ -9,6 +9,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
+  
+  <!-- Calendly Widget Assets -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
   <style>
     :root {
@@ -683,7 +687,7 @@
           </div>
         </div>
 
-        <a href="https://calendly.com/erfonseca/live-1on1-results-demo?back=1&month=2026-03" target="_blank"
+        <a href="javascript:void(0)" onclick="openCalendly()"
           class="btn btn-gold" id="bookBtn" style="display: none;">
           Book Your Live Review →
         </a>
@@ -759,17 +763,30 @@
     phoneInput.addEventListener('input', (e) => {
       const code = document.getElementById('whatsappCode').value;
       const val = e.target.value.trim();
-      // Basic validation length check (e.g. 7+ digits for international numbers)
       if (val.replace(/\D/g, '').length >= 7) {
         bookBtn.style.display = 'inline-flex';
-        // Append the phone number to the Calendly URL as a1
-        const fullNumber = code + ' ' + val;
-        bookBtn.href = `${baseCalendlyUrl}?a1=${encodeURIComponent(fullNumber)}`;
+        // No longer updating href, we use openCalendly()
         phoneInput.style.borderColor = 'rgba(255,255,255,0.3)';
       } else {
         bookBtn.style.display = 'none';
       }
     });
+
+    function openCalendly() {
+      const code = document.getElementById('whatsappCode').value;
+      const val = phoneInput.value.trim();
+      const fullNumber = code + ' ' + val;
+
+      Calendly.initPopupWidget({
+        url: 'https://calendly.com/erfonseca/live-1on1-results-demo',
+        prefill: {
+          customAnswers: {
+            a1: fullNumber
+          }
+        }
+      });
+      return false;
+    }
 
     // User Auth logic
     const userAuthMenu = document.getElementById('userAuthMenu');
@@ -793,6 +810,30 @@
       localStorage.removeItem('aclc_email');
       window.location.reload();
     }
+
+    // 🚀 WHATSAPP DEMO INTEGRATION 🚀
+    // Listen for Calendly event confirmation
+    window.addEventListener('message', function (e) {
+      if (e.data.event && e.data.event === 'calendly.event_scheduled') {
+        // 1. Get the phone number from the input or use a default for demo
+        const phoneInput = document.getElementById('whatsappNumber');
+        const code = document.getElementById('whatsappCode').value;
+        const rawNumber = phoneInput.value.trim().replace(/\D/g, '');
+        
+        // Use the entered number or a placeholder for the demo
+        const whatsappNumber = rawNumber ? (code.replace('+', '') + rawNumber) : '5215555555555'; 
+        
+        const message = '¡Hola! Acabo de confirmar mi cita en Calendly. ¿Podemos coordinar los detalles?';
+        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+        console.log('Calendly Event Detected! Opening WhatsApp...');
+        
+        // Open WhatsApp in a new tab
+        // Note: Some browsers might block this if not triggered by a direct user click, 
+        // but since Calendly's event is post-click, it often works or shows a popup blocker.
+        window.open(url, '_blank');
+      }
+    });
   </script>
 
 </body>
