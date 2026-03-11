@@ -811,27 +811,45 @@
       window.location.reload();
     }
 
-    // 🚀 WHATSAPP DEMO INTEGRATION 🚀
-    // Listen for Calendly event confirmation
+    // 🚀 WHATSAPP DEMO INTEGRATION (v4 - ROBUST) 🚀
+    // Listen for any message from Calendly to debug and redirect
     window.addEventListener('message', function (e) {
-      if (e.data.event && e.data.event === 'calendly.event_scheduled') {
-        // 1. Get the phone number from the input or use a default for demo
-        const phoneInput = document.getElementById('whatsappNumber');
-        const code = document.getElementById('whatsappCode').value;
-        const rawNumber = phoneInput.value.trim().replace(/\D/g, '');
-        
-        // Use the entered number or a placeholder for the demo
-        const whatsappNumber = rawNumber ? (code.replace('+', '') + rawNumber) : '5215555555555'; 
-        
-        const message = '¡Hola! Acabo de confirmar mi cita en Calendly. ¿Podemos coordinar los detalles?';
-        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      // Robust origin & event checking
+      const isCalendly = e.origin.includes('calendly.com') || 
+                         (e.data && e.data.event && e.data.event.includes('calendly'));
+      
+      if (isCalendly) {
+        console.log('Calendly Event Message:', e.data);
 
-        console.log('Calendly Event Detected! Opening WhatsApp...');
-        
-        // Open WhatsApp in a new tab
-        // Note: Some browsers might block this if not triggered by a direct user click, 
-        // but since Calendly's event is post-click, it often works or shows a popup blocker.
-        window.open(url, '_blank');
+        // Check for the specific schedule event
+        if (e.data.event === 'calendly.event_scheduled') {
+          console.log('Success! Booking confirmed. Preparing WhatsApp redirection...');
+          
+          const bookBtn = document.getElementById('bookBtn');
+          const phoneInput = document.getElementById('whatsappNumber');
+          const code = document.getElementById('whatsappCode').value;
+          const rawNumber = phoneInput.value.trim().replace(/\D/g, '');
+          
+          // 1. Immediate Visual Feedback
+          if (bookBtn) {
+            bookBtn.innerHTML = '¡Cita Confirmada! Redirigiendo...';
+            bookBtn.style.background = '#25D366';
+            bookBtn.style.borderColor = '#25D366';
+            bookBtn.style.color = '#fff';
+            bookBtn.style.pointerEvents = 'none'; // Avoid double clicks
+          }
+
+          // 2. Build URL
+          const whatsappNumber = rawNumber ? (code.replace('+', '') + rawNumber) : '5215555555555'; 
+          const message = '¡Hola! Acabo de confirmar mi cita en Calendly. ¿Podemos coordinar los detalles?';
+          const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+          // 3. Fallback: If for some reason redirection is blocked, show alert
+          // but window.location.href is almost never blocked.
+          setTimeout(() => {
+            window.location.href = url;
+          }, 1200);
+        }
       }
     });
   </script>
